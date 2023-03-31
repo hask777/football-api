@@ -1,4 +1,4 @@
 fastapi[all]
 python-dotenv
 sqlalchemy
-requetst
+requests
