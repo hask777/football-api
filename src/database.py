@@ -1,9 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase
-from country.models import Base
+from leagues.models import Base
 
-def test():
-    return
 
 engine = create_engine("sqlite:///sql_app.db", echo=True)
 

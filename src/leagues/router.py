@@ -2,9 +2,8 @@ import requests
 import json
 
 from sqlalchemy.orm import Session
-# from country.models import Country
+from leagues.models import League, Country, Season
 from database import engine
-
 
 
 def get_leagues():
@@ -17,29 +16,51 @@ def get_leagues():
 
     response = requests.get(url, headers=headers).json()['response']
 
-    with open('src/leagues/json/leagues.json', 'w', encoding='utf-8') as f:
-        json.dump(response, f, ensure_ascii=False, indent=4)
+    # with open('src/leagues/json/leagues.json', 'w', encoding='utf-8') as f:
+    #     json.dump(response, f, ensure_ascii=False, indent=4)
+
+    # for item in response:
+    #     print(item['league'])
 
     return response
 
-get_leagues()
 
-# with Session(engine) as session:
 
-#     response = get_countries()
-#         # print(response)
+with Session(engine) as session:
 
-#     for item in response:
-#         # print(item)
-#         country = Country(
-#             name=item['name'],
-#             code=item['code'],
-#             flag=item['flag'],
-#         )
+    response = get_leagues()
+
+    for item in response:
         
+        country = Country(
+            name=item['country']['name'],
+            code=item['country']['code'],
+            flag=item['country']['flag'],
+        )
 
-#         session.add_all([country])
-#         session.commit()
+        league = League(
+            name=item['league']['name'],
+            type=item['league']['type'],
+            logo=item['league']['logo'],
+            country_id=item['country']['name'],
+        )
+
+        for seas in item['seasons']:
+
+            season = Season(
+                year=seas['year'],
+                start=seas['start'],
+                end=seas['end'],
+                current=seas['current'],
+                league_id=item['league']['id']
+            )
+
+
+        session.add_all([country, league, season])
+        session.commit()
+
+
+
 
 
 

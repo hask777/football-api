@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from country.router import *
-from league.router import *
 
-get_countries()
+from leagues.router import *
+
+
 get_leagues()
